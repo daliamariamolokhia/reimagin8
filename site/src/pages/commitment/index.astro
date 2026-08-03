@@ -144,6 +144,9 @@ const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
           <p class="text-sm text-slate">
             Check your email — we've sent your partner's card and your check-in link for day 7. We'll nudge you every few days to check in on each other.
           </p>
+          <p class="pt-2 text-center">
+            <a href="?fresh=1" class="text-xs text-slate underline hover:text-navy-900">Start over (testing only)</a>
+          </p>
         </div>
       </div>
 
@@ -164,6 +167,9 @@ const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
             <p id="waiting-my-action" class="mt-2 font-display text-lg font-semibold text-navy-900"></p>
           </div>
           <p id="waiting-email-notice" class="hidden text-sm text-slate"></p>
+          <p class="pt-2 text-center">
+            <a href="?fresh=1" class="text-xs text-slate underline hover:text-navy-900">Start over (testing only)</a>
+          </p>
         </div>
       </div>
     </div>
@@ -317,8 +323,13 @@ const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
     }
   }
 
-  // Restore state on refresh
-  const saved = loadState();
+  // Restore state on refresh (skip with ?fresh=1 for another test)
+  const skipRestore = new URLSearchParams(window.location.search).has("fresh");
+  if (skipRestore) {
+    sessionStorage.removeItem(STORAGE_KEY);
+  }
+
+  const saved = skipRestore ? null : loadState();
   if (saved) {
     if (saved.status === "paired" && saved.partner) {
       showPaired(saved.actionText, saved.partner);

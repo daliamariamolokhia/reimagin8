@@ -2,12 +2,65 @@
 
 Workshop commitment emails use [Resend](https://resend.com). Without it, pairing still works but **no emails are sent**.
 
-## Step 1 — Create a Resend account
+---
 
-1. Go to **[resend.com](https://resend.com)** → sign up (free tier is fine)
-2. **API Keys** → **Create API Key** → copy the key (`re_...`)
+## Step 1 — Create a Resend account (expanded)
 
-## Step 2 — Add to Netlify
+### 1.1 — Open Resend and sign up
+
+1. Go to **[resend.com](https://resend.com)**
+2. Click **Get Started** or **Sign up**
+3. Sign up with:
+   - **GitHub** (fastest if you already use GitHub), or
+   - **Email + password**
+4. Verify your email if Resend asks you to (check your inbox for a verification link)
+
+### 1.2 — Confirm you're in the dashboard
+
+After signing in you should land on the **Resend dashboard**. The left sidebar typically shows:
+
+- Emails
+- Broadcasts
+- Audiences
+- **API Keys**
+- Domains
+- Settings
+
+If you see that menu, you're in the right place.
+
+### 1.3 — Create an API key
+
+This is the secret password that lets your Netlify site send emails through Resend.
+
+1. Click **API Keys** in the left sidebar
+2. Click **Create API Key** (top right)
+3. Fill in:
+   - **Name:** something you'll recognise, e.g. `reimagin8-netlify` or `workshop-emails`
+   - **Permission:** choose **Sending access** (or **Full access** if that's the only option)
+4. Click **Create** or **Add**
+5. **Copy the key immediately** — it starts with `re_` and looks like:
+   ```
+   re_123abc456def789...
+   ```
+6. Paste it into Notepad or a password manager — **you won't be able to see the full key again** after you close the dialog
+
+⚠️ Treat this like a password. Don't put it on GitHub or share it publicly.
+
+### 1.4 — Note the email you signed up with
+
+Write down the **email address you used for your Resend account**.
+
+If you use Resend's test sender (`onboarding@resend.dev`) for now, emails will **only be delivered to this address** during testing. That's a Resend limitation for unverified domains — not a bug in your site.
+
+### 1.5 — You're done with Step 1 when you have:
+
+- [ ] A Resend account
+- [ ] An API key copied (`re_...`)
+- [ ] Your signup email noted for testing
+
+**Next:** Step 2 below — add the key to Netlify.
+
+---
 
 **Site configuration** → **Environment variables**:
 
