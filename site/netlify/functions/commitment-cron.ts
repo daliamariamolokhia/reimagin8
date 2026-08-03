@@ -54,15 +54,15 @@ export const handler: Handler = async (event) => {
 
     // Day 7 check-in (once per pair)
     if (ageDays >= 7 && !commitment.day7_sent) {
-      try {
-        await sendDay7Email(commitment, partner);
+      const result = await sendDay7Email(commitment, partner);
+      if (result.ok) {
         await supabase
           .from("workshop_commitments")
           .update({ day7_sent: true })
           .in("id", [commitment.id, partner.id]);
         day7Sent++;
-      } catch (err) {
-        console.error("Day 7 email failed:", err);
+      } else {
+        console.error("Day 7 email failed:", result.error);
       }
       continue;
     }
@@ -76,9 +76,9 @@ export const handler: Handler = async (event) => {
       const threshold = commitment.nudge_count === 0 ? 2 : 2.5;
 
       if (sinceLast >= threshold) {
-        try {
-          await sendNudgeEmail(commitment, partner);
-          await sendNudgeEmail(partner, commitment);
+        const r1 = await sendNudgeEmail(commitment, partner);
+        const r2 = await sendNudgeEmail(partner, commitment);
+        if (r1.ok && r2.ok) {
           await supabase
             .from("workshop_commitments")
             .update({
@@ -87,8 +87,8 @@ export const handler: Handler = async (event) => {
             })
             .in("id", [commitment.id, partner.id]);
           nudgesSent++;
-        } catch (err) {
-          console.error("Nudge email failed:", err);
+        } else {
+          console.error("Nudge email failed:", r1.ok ? r2.error : r1.error);
         }
       }
     }

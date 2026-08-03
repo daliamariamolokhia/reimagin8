@@ -140,6 +140,7 @@ const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
             <p id="success-partner-action" class="mt-2 text-navy-800"></p>
             <p id="success-partner-blocker" class="mt-2 text-sm text-slate"></p>
           </div>
+          <p id="email-notice" class="hidden text-sm text-slate"></p>
           <p class="text-sm text-slate">
             Check your email — we've sent your partner's card and your check-in link for day 7. We'll nudge you every few days to check in on each other.
           </p>
@@ -162,6 +163,7 @@ const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
             <p class="text-xs font-semibold uppercase tracking-widest text-coral">Your action</p>
             <p id="waiting-my-action" class="mt-2 font-display text-lg font-semibold text-navy-900"></p>
           </div>
+          <p id="waiting-email-notice" class="hidden text-sm text-slate"></p>
         </div>
       </div>
     </div>
@@ -266,8 +268,31 @@ const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
     }, POLL_MS);
   }
 
+  function showEmailNotice(sent: boolean, configured: boolean, warning?: string) {
+    const el = document.getElementById("email-notice");
+    const waitingEl = document.getElementById("waiting-email-notice");
+    const target = el?.offsetParent !== null ? el : waitingEl;
+    if (!target) return;
+
+    if (sent) {
+      target.textContent = "Confirmation email sent — check your inbox (and spam folder).";
+      target.className = "text-sm text-navy-700";
+    } else if (!configured) {
+      target.textContent =
+        "Email is not configured on this site yet — your commitment is saved, but no confirmation was sent.";
+      target.className = "rounded-xl bg-surface px-4 py-3 text-sm text-slate";
+    } else if (warning) {
+      target.textContent = `Email could not be sent: ${warning}. Your commitment is still saved.`;
+      target.className = "rounded-xl bg-coral/10 px-4 py-3 text-sm text-coral-dark";
+    }
+    target.classList.remove("hidden");
+  }
+
   function handleSubmitResponse(data: {
     status: string;
+    emailSent?: boolean;
+    emailConfigured?: boolean;
+    emailWarning?: string;
     commitment: { id: string; actionText: string };
     partner?: { name: string; actionText: string; blocker: string };
   }) {
@@ -279,6 +304,7 @@ const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
         partner: data.partner,
       });
       showPaired(data.commitment.actionText, data.partner);
+      showEmailNotice(Boolean(data.emailSent), Boolean(data.emailConfigured), data.emailWarning);
     } else {
       saveState({
         id: data.commitment.id,
@@ -286,6 +312,7 @@ const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
         status: "waiting",
       });
       showWaiting(data.commitment.actionText);
+      showEmailNotice(Boolean(data.emailSent), Boolean(data.emailConfigured), data.emailWarning);
       startPolling(data.commitment.id, data.commitment.actionText);
     }
   }

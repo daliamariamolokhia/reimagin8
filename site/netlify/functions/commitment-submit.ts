@@ -1,8 +1,9 @@
 import type { Handler } from "@netlify/functions";
 import { getSupabase, type Commitment } from "./_shared/supabase";
 import {
-  sendPairedNotification,
-  sendWaitingEmail,
+  isEmailConfigured,
+  sendPairingEmails,
+  sendSubmissionConfirmation,
 } from "./_shared/email";
 
 type SubmitBody = {
@@ -95,6 +96,11 @@ export const handler: Handler = async (event) => {
     if (validationError) return json(400, { error: validationError });
 
     const supabase = getSupabase();
+    const emailConfigured = isEmailConfigured();
+
+    if (!emailConfigured) {
+      console.warn("[commitment-submit] RESEND_API_KEY not set — no emails will be sent");
+    }
 
     const { data: inserted, error: insertError } = await supabase
       .from("workshop_commitments")
@@ -119,6 +125,9 @@ export const handler: Handler = async (event) => {
     const commitment = inserted as Commitment;
     const partner = await pairWithOldestPending(supabase, commitment.session_id, commitment.id);
 
+    let emailSent = false;
+    let emailWarning: string | undefined;
+
     if (partner) {
       const { data: refreshed } = await supabase
         .from("workshop_commitments")
@@ -128,19 +137,30 @@ export const handler: Handler = async (event) => {
 
       const me = (refreshed ?? commitment) as Commitment;
 
-      try {
-        await sendPairedNotification(me, partner);
-        await sendPairedNotification(partner, me);
+      const results = await sendPairingEmails(me, partner);
+      emailSent = results.newPerson.ok && results.waitingPartner.ok;
+
+      if (!results.newPerson.ok) {
+        console.error("[commitment-submit] Email to new submitter failed:", results.newPerson.error);
+        emailWarning = results.newPerson.error;
+      }
+      if (!results.waitingPartner.ok) {
+        console.error("[commitment-submit] Email to waiting partner failed:", results.waitingPartner.error);
+        emailWarning = results.waitingPartner.error;
+      }
+
+      if (emailSent) {
         await supabase
           .from("workshop_commitments")
           .update({ welcome_sent: true })
           .in("id", [me.id, partner.id]);
-      } catch (emailErr) {
-        console.error("Email send failed:", emailErr);
       }
 
       return json(200, {
         status: "paired",
+        emailSent,
+        emailConfigured,
+        emailWarning,
         commitment: {
           id: me.id,
           name: me.name,
@@ -155,14 +175,19 @@ export const handler: Handler = async (event) => {
       });
     }
 
-    try {
-      await sendWaitingEmail(commitment);
-    } catch (emailErr) {
-      console.error("Waiting email failed:", emailErr);
+    const waitingResult = await sendSubmissionConfirmation(commitment, "waiting");
+    emailSent = waitingResult.ok;
+
+    if (!waitingResult.ok) {
+      console.error("[commitment-submit] Waiting confirmation email failed:", waitingResult.error);
+      emailWarning = waitingResult.error;
     }
 
     return json(200, {
       status: "waiting",
+      emailSent,
+      emailConfigured,
+      emailWarning,
       commitment: {
         id: commitment.id,
         name: commitment.name,
