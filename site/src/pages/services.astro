@@ -1,0 +1,69 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CtaButton from "../components/CtaButton.astro";
+import { services } from "../data/site";
+---
+
+<Layout
+  title="Services"
+  description="Strategy, innovation, design, and leadership development — four integrated disciplines for organisations ready to reinvent."
+>
+  <Header slot="header" />
+
+  <section class="hero-gradient px-4 py-16 sm:px-6 sm:py-20">
+    <div class="mx-auto max-w-4xl">
+      <p class="text-sm font-semibold uppercase tracking-widest text-coral">Services</p>
+      <h1 class="mt-3 font-display text-4xl font-bold text-white sm:text-5xl">Integrated advisory for reinvention</h1>
+      <p class="mt-5 max-w-2xl text-lg text-white/75">
+        Whether you need a strategic reset, an innovation sprint, or leadership transformation — we bring the
+        right blend of disciplines to your challenge.
+      </p>
+    </div>
+  </section>
+
+  <section class="px-4 py-16 sm:px-6">
+    <div class="mx-auto max-w-6xl space-y-16">
+      {
+        services.map((service, i) => (
+          <article class:list={["grid gap-10 lg:grid-cols-2 lg:items-center", i % 2 === 1 && "lg:[direction:rtl]"]}>
+            <div class:list={[i % 2 === 1 && "lg:[direction:ltr]"]}>
+              <span class="font-display text-6xl font-bold text-coral/15">{String(i + 1).padStart(2, "0")}</span>
+              <h2 class="mt-2 font-display text-3xl font-bold">{service.title}</h2>
+              <p class="mt-4 text-lg leading-relaxed text-slate">{service.description}</p>
+              <div class="mt-6">
+                <CtaButton href="/contact" variant="outline">Discuss this service</CtaButton>
+              </div>
+            </div>
+            <div
+              class:list={[
+                "aspect-[4/3] rounded-2xl border border-surface bg-gradient-to-br p-8",
+                i % 2 === 0 ? "from-navy-900/5 via-surface to-sky/10" : "from-coral/5 via-surface to-navy-900/5",
+                i % 2 === 1 && "lg:[direction:ltr]",
+              ]}
+            >
+              <div class="flex h-full items-end">
+                <p class="font-display text-2xl font-semibold text-navy-900/30">{service.title}</p>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="border-t border-surface bg-white px-4 py-16 sm:px-6">
+    <div class="mx-auto max-w-3xl text-center">
+      <h2 class="font-display text-3xl font-bold">Not sure where to start?</h2>
+      <p class="mt-4 text-lg text-slate">
+        Most engagements begin with a discovery conversation. We'll help you identify the highest-leverage starting point.
+      </p>
+      <div class="mt-8">
+        <CtaButton href="/contact" size="lg">Book a discovery call</CtaButton>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Layout>

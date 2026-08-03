@@ -1,0 +1,127 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CtaButton from "../components/CtaButton.astro";
+import { workshops } from "../data/site";
+---
+
+<Layout
+  title="Workshops"
+  description="Immersive leadership workshops including The Growth Gap — closing the knowing-doing gap for teams ready to level up."
+>
+  <Header slot="header" />
+
+  <section class="hero-gradient px-4 py-16 sm:px-6 sm:py-20">
+    <div class="mx-auto max-w-4xl">
+      <p class="text-sm font-semibold uppercase tracking-widest text-coral">Workshops</p>
+      <h1 class="mt-3 font-display text-4xl font-bold text-white sm:text-5xl">Immersive sessions that shift mindsets</h1>
+      <p class="mt-5 max-w-2xl text-lg text-white/75">
+        Our workshops are designed for leadership teams who know what needs to happen — but haven't yet made it happen.
+        High energy, high honesty, high impact.
+      </p>
+    </div>
+  </section>
+
+  <section class="px-4 py-16 sm:px-6">
+    <div class="mx-auto max-w-6xl space-y-12">
+      {
+        workshops.map((workshop) => (
+          <article
+            class:list={[
+              "overflow-hidden rounded-2xl border shadow-sm",
+              workshop.featured ? "border-coral/30 bg-white ring-1 ring-coral/10" : "border-surface bg-white",
+            ]}
+          >
+            <div class="grid lg:grid-cols-5">
+              <div
+                class:list={[
+                  "flex flex-col justify-between p-8 lg:col-span-2",
+                  workshop.featured ? "bg-navy-900 text-white" : "bg-surface",
+                ]}
+              >
+                <div>
+                  {workshop.featured && (
+                    <span class="inline-block rounded-full bg-coral/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-coral">
+                      Featured
+                    </span>
+                  )}
+                  <h2
+                    class:list={[
+                      "mt-3 font-display text-2xl font-bold",
+                      workshop.featured ? "text-white" : "text-navy-900",
+                    ]}
+                  >
+                    {workshop.title}
+                  </h2>
+                  <p class:list={["mt-1 italic", workshop.featured ? "text-sky-light" : "text-sky"]}>
+                    "{workshop.subtitle}"
+                  </p>
+                </div>
+                <div class="mt-6 flex flex-wrap gap-2">
+                  <span
+                    class:list={[
+                      "rounded-full px-3 py-1 text-xs font-medium",
+                      workshop.featured ? "bg-white/10 text-white/80" : "bg-white text-navy-800",
+                    ]}
+                  >
+                    {workshop.duration}
+                  </span>
+                  <span
+                    class:list={[
+                      "rounded-full px-3 py-1 text-xs font-medium",
+                      workshop.featured ? "bg-white/10 text-white/80" : "bg-white text-navy-800",
+                    ]}
+                  >
+                    {workshop.audience}
+                  </span>
+                </div>
+              </div>
+              <div class="p-8 lg:col-span-3">
+                <p class="leading-relaxed text-slate">{workshop.description}</p>
+                <h3 class="mt-6 text-sm font-semibold uppercase tracking-widest text-coral">Outcomes</h3>
+                <ul class="mt-3 grid gap-2 sm:grid-cols-2">
+                  {
+                    workshop.outcomes.map((outcome) => (
+                      <li class="flex items-start gap-2 text-sm text-navy-800">
+                        <svg class="mt-0.5 h-4 w-4 shrink-0 text-coral" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                        {outcome}
+                      </li>
+                    ))
+                  }
+                </ul>
+                <div class="mt-8">
+                  <CtaButton href="/contact">Enquire about this workshop</CtaButton>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="border-t border-surface bg-surface/50 px-4 py-12 sm:px-6">
+    <div class="mx-auto max-w-3xl rounded-2xl border border-surface bg-white p-8 text-center">
+      <h2 class="font-display text-xl font-bold">Running the Growth Gap workshop?</h2>
+      <p class="mt-2 text-sm text-slate">Display the QR code during Part Five — Action so participants can submit commitment cards.</p>
+      <a href="/commitment/qr" class="mt-4 inline-block text-sm font-semibold text-coral hover:underline">Open facilitator QR page →</a>
+    </div>
+  </section>
+
+  <section class="border-t border-surface bg-surface/50 px-4 py-16 sm:px-6">
+    <div class="mx-auto max-w-3xl text-center">
+      <h2 class="font-display text-3xl font-bold">Custom workshops available</h2>
+      <p class="mt-4 text-lg text-slate">
+        Need something tailored to your team or industry? We design bespoke sessions around your specific growth challenge.
+      </p>
+      <div class="mt-8">
+        <CtaButton href="/contact" variant="outline" size="lg">Discuss a custom workshop</CtaButton>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Layout>

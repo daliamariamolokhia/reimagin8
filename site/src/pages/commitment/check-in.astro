@@ -1,0 +1,130 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Day 7 Check-in" description="Connect with your accountability partner and share your progress.">
+  <section class="hero-gradient px-4 py-12 sm:px-6">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="text-sm font-semibold uppercase tracking-widest text-coral">Day 7</p>
+      <h1 class="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">Time to connect</h1>
+      <p class="mt-4 text-white/75">Seven days ago you traded cards. Did you do it?</p>
+    </div>
+  </section>
+
+  <section class="px-4 py-12 sm:px-6">
+    <div class="mx-auto max-w-xl">
+      <div id="loading" class="text-center text-slate">Loading your commitment…</div>
+      <div id="checkin-form-wrap" class="hidden overflow-hidden rounded-2xl border border-surface bg-white shadow-xl">
+        <div class="bg-navy-900 px-6 py-5">
+          <p class="text-xs font-semibold uppercase tracking-widest text-coral">Day 7 check-in</p>
+        </div>
+        <div id="commitment-summary" class="border-b border-surface bg-off-white px-6 py-5 text-sm"></div>
+        <form id="checkin-form" class="space-y-6 p-6 sm:p-8">
+          <fieldset>
+            <legend class="text-sm font-medium text-navy-900">Did you complete your action?</legend>
+            <div class="mt-3 flex gap-4">
+              <label class="flex items-center gap-2 text-sm">
+                <input type="radio" name="completed" value="yes" required class="text-coral" /> Yes
+              </label>
+              <label class="flex items-center gap-2 text-sm">
+                <input type="radio" name="completed" value="no" required class="text-coral" /> Not yet
+              </label>
+              <label class="flex items-center gap-2 text-sm">
+                <input type="radio" name="completed" value="partial" required class="text-coral" /> Partially
+              </label>
+            </div>
+          </fieldset>
+          <div>
+            <label for="reflection" class="block text-sm font-medium text-navy-900">What happened? What did you learn?</label>
+            <textarea
+              id="reflection"
+              name="reflection"
+              rows="4"
+              required
+              class="mt-2 w-full rounded-xl border border-surface bg-off-white px-4 py-3 text-sm focus:border-sky focus:outline-none focus:ring-2 focus:ring-sky/20"
+            ></textarea>
+          </div>
+          <div>
+            <label for="partnerUpdate" class="block text-sm font-medium text-navy-900">Update for your accountability partner (optional)</label>
+            <textarea
+              id="partnerUpdate"
+              name="partnerUpdate"
+              rows="2"
+              class="mt-2 w-full rounded-xl border border-surface bg-off-white px-4 py-3 text-sm focus:border-sky focus:outline-none focus:ring-2 focus:ring-sky/20"
+              placeholder="Share this when you connect with them today"
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            class="w-full rounded-full bg-coral px-6 py-4 text-sm font-semibold text-white transition hover:bg-coral-dark"
+          >
+            Submit check-in
+          </button>
+        </form>
+      </div>
+      <div id="checkin-success" class="hidden rounded-2xl border border-surface bg-white p-8 text-center shadow-xl">
+        <p class="font-display text-2xl font-bold text-navy-900">Thank you</p>
+        <p class="mt-3 text-slate">Now reach out to your partner and have the conversation. That's the forcing function.</p>
+      </div>
+      <div id="checkin-error" class="hidden rounded-xl bg-coral/10 px-4 py-3 text-sm text-coral-dark text-center"></div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+  const loading = document.getElementById("loading");
+  const formWrap = document.getElementById("checkin-form-wrap");
+  const success = document.getElementById("checkin-success");
+  const errorEl = document.getElementById("checkin-error");
+  const summary = document.getElementById("commitment-summary");
+  const form = document.getElementById("checkin-form") as HTMLFormElement;
+
+  if (!token) {
+    if (loading) loading.textContent = "Invalid link — use the URL from your day-7 email.";
+  } else {
+    fetch(`/.netlify/functions/commitment-checkin?token=${encodeURIComponent(token)}`)
+      .then((r) => r.json())
+      .then((data) => {
+        loading?.classList.add("hidden");
+        if (data.error) {
+          errorEl!.textContent = data.error;
+          errorEl?.classList.remove("hidden");
+          return;
+        }
+        const c = data.commitment;
+        const p = data.partner;
+        if (summary) {
+          summary.innerHTML = `
+            <p><strong>Your action:</strong> ${c.action_text}</p>
+            ${p ? `<p class="mt-2"><strong>${p.name}'s action:</strong> ${p.action_text}</p>` : ""}
+          `;
+        }
+        formWrap?.classList.remove("hidden");
+      })
+      .catch(() => {
+        loading!.textContent = "Could not load commitment. Try again later.";
+      });
+  }
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const completed = fd.get("completed") === "yes";
+    const res = await fetch("/.netlify/functions/commitment-checkin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token,
+        completed,
+        reflection: fd.get("reflection"),
+        partnerUpdate: fd.get("partnerUpdate"),
+      }),
+    });
+    if (res.ok) {
+      formWrap?.classList.add("hidden");
+      success?.classList.remove("hidden");
+    }
+  });
+</script>

@@ -1,0 +1,228 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { defaultWorkshopSession, growthStages, knowingDoingBlockers } from "../../data/site";
+
+const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
+---
+
+<Layout
+  title="My Commitment Card"
+  description="Make your 7-day commitment and trade accountability cards with a fellow workshop participant."
+>
+  <section class="hero-gradient px-4 py-12 sm:px-6 sm:py-16">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="text-sm font-semibold uppercase tracking-widest text-coral">Part Five — Action</p>
+      <h1 class="mt-3 font-display text-3xl font-bold text-white sm:text-4xl">One action. Seven days. Someone who'll ask.</h1>
+      <p class="mt-4 text-white/75">Fill in your commitment card below. We'll pair you with someone else in the room — you'll hold each other accountable.</p>
+    </div>
+  </section>
+
+  <section class="px-4 py-12 sm:px-6">
+    <div class="mx-auto max-w-xl">
+      <!-- Virtual card -->
+      <div id="card-form" class="overflow-hidden rounded-2xl border border-surface bg-white shadow-xl">
+        <div class="bg-navy-900 px-6 py-5">
+          <p class="text-xs font-semibold uppercase tracking-widest text-coral">My Next Right Action</p>
+          <p class="mt-1 text-sm text-white/60">Growth Gap Workshop</p>
+        </div>
+
+        <form id="commitment-form" class="space-y-6 p-6 sm:p-8">
+          <input type="hidden" name="sessionId" value={session} />
+
+          <div>
+            <label for="name" class="block text-sm font-medium text-navy-900">Your name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              autocomplete="name"
+              class="mt-2 w-full rounded-xl border border-surface bg-off-white px-4 py-3 text-sm focus:border-sky focus:outline-none focus:ring-2 focus:ring-sky/20"
+            />
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-navy-900">Email <span class="text-slate">(for nudges & day-7 check-in)</span></label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              autocomplete="email"
+              class="mt-2 w-full rounded-xl border border-surface bg-off-white px-4 py-3 text-sm focus:border-sky focus:outline-none focus:ring-2 focus:ring-sky/20"
+            />
+          </div>
+
+          <div>
+            <label for="stageCrisis" class="block text-sm font-medium text-navy-900">
+              <span class="text-coral">01</span> My current stage / crisis
+            </label>
+            <select
+              id="stageCrisis"
+              name="stageCrisis"
+              required
+              class="mt-2 w-full rounded-xl border border-surface bg-off-white px-4 py-3 text-sm focus:border-sky focus:outline-none focus:ring-2 focus:ring-sky/20"
+            >
+              <option value="">Select your stage…</option>
+              {growthStages.map((stage) => <option value={stage}>{stage}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <label for="blocker" class="block text-sm font-medium text-navy-900">
+              <span class="text-coral">02</span> My real knowing-doing blocker
+            </label>
+            <select
+              id="blocker"
+              name="blocker"
+              required
+              class="mt-2 w-full rounded-xl border border-surface bg-off-white px-4 py-3 text-sm focus:border-sky focus:outline-none focus:ring-2 focus:ring-sky/20"
+            >
+              <option value="">Which one is running your gap?</option>
+              {knowingDoingBlockers.map((blocker) => <option value={blocker}>{blocker}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <label for="actionText" class="block text-sm font-medium text-navy-900">
+              <span class="text-coral">03</span> My one action, next 7 days
+            </label>
+            <textarea
+              id="actionText"
+              name="actionText"
+              rows="3"
+              required
+              placeholder="One specific thing you will do — not a goal, an action."
+              class="mt-2 w-full rounded-xl border border-surface bg-off-white px-4 py-3 text-sm focus:border-sky focus:outline-none focus:ring-2 focus:ring-sky/20"
+            ></textarea>
+          </div>
+
+          <div>
+            <label for="accountabilityNote" class="block text-sm font-medium text-navy-900">
+              <span class="text-coral">04</span> How someone else will know I did it
+            </label>
+            <textarea
+              id="accountabilityNote"
+              name="accountabilityNote"
+              rows="2"
+              required
+              placeholder="What evidence will your partner see?"
+              class="mt-2 w-full rounded-xl border border-surface bg-off-white px-4 py-3 text-sm focus:border-sky focus:outline-none focus:ring-2 focus:ring-sky/20"
+            ></textarea>
+          </div>
+
+          <p id="form-error" class="hidden rounded-xl bg-coral/10 px-4 py-3 text-sm text-coral-dark" role="alert"></p>
+
+          <button
+            type="submit"
+            id="submit-btn"
+            class="w-full rounded-full bg-coral px-6 py-4 text-sm font-semibold text-white transition hover:bg-coral-dark disabled:opacity-60"
+          >
+            Submit my commitment card
+          </button>
+        </form>
+      </div>
+
+      <!-- Success: paired -->
+      <div id="card-success-paired" class="hidden overflow-hidden rounded-2xl border border-surface bg-white shadow-xl">
+        <div class="bg-navy-900 px-6 py-8 text-center">
+          <p class="text-xs font-semibold uppercase tracking-widest text-coral">Cards traded</p>
+          <h2 class="mt-2 font-display text-2xl font-bold text-white">Make it social</h2>
+        </div>
+        <div class="space-y-6 p-6 sm:p-8">
+          <div class="rounded-xl border-2 border-coral/30 bg-coral/5 p-5">
+            <p class="text-xs font-semibold uppercase tracking-widest text-coral">Your commitment</p>
+            <p id="success-my-action" class="mt-2 font-display text-lg font-semibold text-navy-900"></p>
+          </div>
+          <div class="rounded-xl border-2 border-sky/30 bg-sky/5 p-5">
+            <p class="text-xs font-semibold uppercase tracking-widest text-sky">You're holding accountable</p>
+            <p id="success-partner-name" class="mt-1 font-semibold text-navy-900"></p>
+            <p id="success-partner-action" class="mt-2 text-navy-800"></p>
+            <p id="success-partner-blocker" class="mt-2 text-sm text-slate"></p>
+          </div>
+          <p class="text-sm text-slate">
+            Check your email — we've sent your partner's card and your check-in link for day 7. We'll nudge you every few days to check in on each other.
+          </p>
+        </div>
+      </div>
+
+      <!-- Success: waiting for partner -->
+      <div id="card-success-waiting" class="hidden overflow-hidden rounded-2xl border border-surface bg-white shadow-xl">
+        <div class="bg-navy-900 px-6 py-8 text-center">
+          <p class="text-xs font-semibold uppercase tracking-widest text-sky">Almost there</p>
+          <h2 class="mt-2 font-display text-2xl font-bold text-white">Waiting for your partner</h2>
+        </div>
+        <div class="space-y-4 p-6 sm:p-8">
+          <p class="text-slate">Your commitment is saved. As soon as the next person submits, you'll be paired and receive an email with their card.</p>
+          <div class="rounded-xl border border-surface bg-off-white p-5">
+            <p class="text-xs font-semibold uppercase tracking-widest text-coral">Your action</p>
+            <p id="waiting-my-action" class="mt-2 font-display text-lg font-semibold text-navy-900"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.getElementById("commitment-form") as HTMLFormElement;
+  const formWrap = document.getElementById("card-form");
+  const pairedWrap = document.getElementById("card-success-paired");
+  const waitingWrap = document.getElementById("card-success-waiting");
+  const errorEl = document.getElementById("form-error");
+  const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement;
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorEl?.classList.add("hidden");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting…";
+
+    const fd = new FormData(form);
+    const payload = {
+      sessionId: fd.get("sessionId"),
+      name: fd.get("name"),
+      email: fd.get("email"),
+      stageCrisis: fd.get("stageCrisis"),
+      blocker: fd.get("blocker"),
+      actionText: fd.get("actionText"),
+      accountabilityNote: fd.get("accountabilityNote"),
+    };
+
+    try {
+      const res = await fetch("/.netlify/functions/commitment-submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error ?? "Submission failed");
+      }
+
+      formWrap?.classList.add("hidden");
+
+      if (data.status === "paired") {
+        (document.getElementById("success-my-action") as HTMLElement).textContent = data.commitment.actionText;
+        (document.getElementById("success-partner-name") as HTMLElement).textContent = data.partner.name;
+        (document.getElementById("success-partner-action") as HTMLElement).textContent = data.partner.actionText;
+        (document.getElementById("success-partner-blocker") as HTMLElement).textContent =
+          `Blocker: ${data.partner.blocker}`;
+        pairedWrap?.classList.remove("hidden");
+      } else {
+        (document.getElementById("waiting-my-action") as HTMLElement).textContent = data.commitment.actionText;
+        waitingWrap?.classList.remove("hidden");
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      if (errorEl) {
+        errorEl.textContent = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+        errorEl.classList.remove("hidden");
+      }
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit my commitment card";
+    }
+  });
+</script>

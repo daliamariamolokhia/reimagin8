@@ -1,0 +1,199 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CtaButton from "../components/CtaButton.astro";
+import { approachSteps, clients, services, site, stats, workshops } from "../data/site";
+
+const featuredWorkshop = workshops.find((w) => w.featured)!;
+---
+
+<Layout title="Home">
+  <Header slot="header" />
+
+  <!-- Hero -->
+  <section class="hero-gradient px-4 py-20 sm:px-6 sm:py-28 lg:py-32">
+    <div class="mx-auto max-w-6xl">
+      <div class="max-w-3xl">
+        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-coral">Premium Advisory & Innovation</p>
+        <h1 class="mt-5 font-display text-4xl font-bold leading-[1.1] text-white sm:text-5xl lg:text-6xl">
+          Reinvent your business.<br />
+          <span class="text-gradient">Unlock what's next.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-white/75 sm:text-xl">
+          {site.description}
+        </p>
+        <div class="mt-10 flex flex-wrap gap-4">
+          <CtaButton href="/contact" size="lg">Book a discovery call</CtaButton>
+          <CtaButton href="/approach" variant="ghost" size="lg">How we work</CtaButton>
+        </div>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="mt-16 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:mt-20">
+        {
+          stats.map((stat) => (
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+              <p class="font-display text-3xl font-bold text-white">{stat.value}</p>
+              <p class="mt-1 text-sm text-white/60">{stat.label}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Services overview -->
+  <section class="px-4 py-20 sm:px-6">
+    <div class="mx-auto max-w-6xl">
+      <div class="max-w-2xl">
+        <p class="text-sm font-semibold uppercase tracking-widest text-coral">What we do</p>
+        <h2 class="mt-2 font-display text-3xl font-bold sm:text-4xl">
+          Four disciplines. One transformation partner.
+        </h2>
+        <p class="mt-4 text-lg text-slate">
+          We combine the rigour of top-tier consultancy with the creativity of a design studio — and the
+          human insight of leadership development.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-6 sm:grid-cols-2">
+        {
+          services.map((service) => (
+            <article class="card-hover group rounded-2xl border border-surface bg-white p-8 shadow-sm">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-navy-900/5 group-hover:bg-coral/10 transition">
+                {service.icon === "compass" && (
+                  <svg class="h-6 w-6 text-coral" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+                  </svg>
+                )}
+                {service.icon === "spark" && (
+                  <svg class="h-6 w-6 text-sky" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                  </svg>
+                )}
+                {service.icon === "layers" && (
+                  <svg class="h-6 w-6 text-navy-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
+                  </svg>
+                )}
+                {service.icon === "growth" && (
+                  <svg class="h-6 w-6 text-coral" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                  </svg>
+                )}
+              </div>
+              <h3 class="font-display text-xl font-semibold">{service.title}</h3>
+              <p class="mt-3 leading-relaxed text-slate">{service.description}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="mt-10 text-center">
+        <CtaButton href="/services" variant="outline">Explore all services</CtaButton>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured workshop -->
+  <section class="bg-navy-900 px-4 py-20 text-white sm:px-6">
+    <div class="mx-auto max-w-6xl">
+      <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-widest text-coral">Featured Workshop</p>
+          <h2 class="mt-2 font-display text-3xl font-bold text-white sm:text-4xl">{featuredWorkshop.title}</h2>
+          <p class="mt-1 text-lg italic text-sky-light">"{featuredWorkshop.subtitle}"</p>
+          <p class="mt-6 leading-relaxed text-white/75">{featuredWorkshop.description}</p>
+          <ul class="mt-6 space-y-2">
+            {
+              featuredWorkshop.outcomes.slice(0, 3).map((outcome) => (
+                <li class="flex items-start gap-3 text-sm text-white/80">
+                  <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-coral"></span>
+                  {outcome}
+                </li>
+              ))
+            }
+          </ul>
+          <div class="mt-8">
+            <CtaButton href="/workshops">View workshops</CtaButton>
+          </div>
+        </div>
+        <div class="relative">
+          <div class="aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 bg-navy-800/50 p-8">
+            <div class="flex h-full flex-col justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-widest text-coral">Workshop</p>
+                <p class="mt-4 font-display text-4xl font-bold leading-tight">IT'S TIME TO<br />LEVEL UP</p>
+              </div>
+              <div>
+                <p class="text-2xl italic text-sky">Why knowing isn't doing</p>
+                <div class="mt-6 flex gap-3">
+                  <span class="rounded-full bg-coral/20 px-3 py-1 text-xs font-medium text-coral">{featuredWorkshop.duration}</span>
+                  <span class="rounded-full bg-sky/20 px-3 py-1 text-xs font-medium text-sky-light">Leadership teams</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Approach -->
+  <section class="section-gradient px-4 py-20 sm:px-6">
+    <div class="mx-auto max-w-6xl">
+      <div class="text-center">
+        <p class="text-sm font-semibold uppercase tracking-widest text-coral">Our approach</p>
+        <h2 class="mt-2 font-display text-3xl font-bold sm:text-4xl">From insight to impact</h2>
+        <p class="mx-auto mt-4 max-w-2xl text-lg text-slate">
+          We don't deliver decks and disappear. Every engagement follows a proven path from diagnosis to lasting capability.
+        </p>
+      </div>
+
+      <div class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          approachSteps.map((step) => (
+            <article class="relative rounded-2xl border border-surface bg-white p-6 shadow-sm">
+              <span class="font-display text-4xl font-bold text-coral/20">{step.step}</span>
+              <h3 class="mt-2 font-display text-lg font-semibold">{step.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-slate">{step.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Sectors -->
+  <section class="px-4 py-16 sm:px-6">
+    <div class="mx-auto max-w-6xl text-center">
+      <p class="text-sm font-semibold uppercase tracking-widest text-slate">Trusted across sectors</p>
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+        {
+          clients.map((client) => (
+            <span class="rounded-full border border-surface bg-white px-5 py-2 text-sm font-medium text-navy-800">
+              {client}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="px-4 py-20 sm:px-6">
+    <div class="mx-auto max-w-3xl rounded-3xl bg-navy-900 px-8 py-14 text-center sm:px-12">
+      <h2 class="font-display text-3xl font-bold text-white sm:text-4xl">Ready to reimagine?</h2>
+      <p class="mx-auto mt-4 max-w-lg text-white/70">
+        We work with a select number of clients each quarter. If you're serious about transformation, let's talk.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <CtaButton href="/contact" size="lg">Start a conversation</CtaButton>
+        <CtaButton href="/workshops" variant="ghost" size="lg">Explore workshops</CtaButton>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Layout>

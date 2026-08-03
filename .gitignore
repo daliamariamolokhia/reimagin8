@@ -1,0 +1,6 @@
+# Deck extraction (local reference only)
+_deck-extract/
+deck.zip
+
+# OS
+.DS_Store
