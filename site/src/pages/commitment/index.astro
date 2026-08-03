@@ -153,7 +153,11 @@ const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
           <h2 class="mt-2 font-display text-2xl font-bold text-white">Waiting for your partner</h2>
         </div>
         <div class="space-y-4 p-6 sm:p-8">
-          <p class="text-slate">Your commitment is saved. As soon as the next person submits, you'll be paired and receive an email with their card.</p>
+          <p class="text-slate">Your commitment is saved. This page will update automatically as soon as the next person submits — keep this tab open.</p>
+          <div id="waiting-status" class="flex items-center gap-2 text-sm text-sky">
+            <span class="inline-block h-2 w-2 animate-pulse rounded-full bg-sky"></span>
+            Checking for your partner…
+          </div>
           <div class="rounded-xl border border-surface bg-off-white p-5">
             <p class="text-xs font-semibold uppercase tracking-widest text-coral">Your action</p>
             <p id="waiting-my-action" class="mt-2 font-display text-lg font-semibold text-navy-900"></p>
@@ -165,12 +169,138 @@ const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
 </Layout>
 
 <script>
+  const STORAGE_KEY = "reimagin8_commitment";
+  const POLL_MS = 2500;
+
   const form = document.getElementById("commitment-form") as HTMLFormElement;
   const formWrap = document.getElementById("card-form");
   const pairedWrap = document.getElementById("card-success-paired");
   const waitingWrap = document.getElementById("card-success-waiting");
   const errorEl = document.getElementById("form-error");
   const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement;
+
+  let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+  type StoredCommitment = {
+    id: string;
+    actionText: string;
+    status: "waiting" | "paired";
+    partner?: { name: string; actionText: string; blocker: string };
+  };
+
+  function saveState(data: StoredCommitment) {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function loadState(): StoredCommitment | null {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      return raw ? (JSON.parse(raw) as StoredCommitment) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function showForm() {
+    formWrap?.classList.remove("hidden");
+    pairedWrap?.classList.add("hidden");
+    waitingWrap?.classList.add("hidden");
+  }
+
+  function showPaired(
+    actionText: string,
+    partner: { name: string; actionText: string; blocker: string },
+  ) {
+    formWrap?.classList.add("hidden");
+    waitingWrap?.classList.add("hidden");
+    (document.getElementById("success-my-action") as HTMLElement).textContent = actionText;
+    (document.getElementById("success-partner-name") as HTMLElement).textContent = partner.name;
+    (document.getElementById("success-partner-action") as HTMLElement).textContent = partner.actionText;
+    (document.getElementById("success-partner-blocker") as HTMLElement).textContent =
+      `Blocker: ${partner.blocker}`;
+    pairedWrap?.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function showWaiting(actionText: string) {
+    formWrap?.classList.add("hidden");
+    pairedWrap?.classList.add("hidden");
+    (document.getElementById("waiting-my-action") as HTMLElement).textContent = actionText;
+    waitingWrap?.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function stopPolling() {
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+  }
+
+  async function checkStatus(id: string): Promise<boolean> {
+    const res = await fetch(`/.netlify/functions/commitment-status?id=${encodeURIComponent(id)}`);
+    if (!res.ok) return false;
+
+    const data = await res.json();
+
+    if (data.status === "paired" && data.partner) {
+      stopPolling();
+      const stored: StoredCommitment = {
+        id,
+        actionText: data.commitment.actionText,
+        status: "paired",
+        partner: data.partner,
+      };
+      saveState(stored);
+      showPaired(data.commitment.actionText, data.partner);
+      return true;
+    }
+
+    return false;
+  }
+
+  function startPolling(id: string, actionText: string) {
+    stopPolling();
+    pollTimer = setInterval(() => {
+      checkStatus(id).catch(() => {});
+    }, POLL_MS);
+  }
+
+  function handleSubmitResponse(data: {
+    status: string;
+    commitment: { id: string; actionText: string };
+    partner?: { name: string; actionText: string; blocker: string };
+  }) {
+    if (data.status === "paired" && data.partner) {
+      saveState({
+        id: data.commitment.id,
+        actionText: data.commitment.actionText,
+        status: "paired",
+        partner: data.partner,
+      });
+      showPaired(data.commitment.actionText, data.partner);
+    } else {
+      saveState({
+        id: data.commitment.id,
+        actionText: data.commitment.actionText,
+        status: "waiting",
+      });
+      showWaiting(data.commitment.actionText);
+      startPolling(data.commitment.id, data.commitment.actionText);
+    }
+  }
+
+  // Restore state on refresh
+  const saved = loadState();
+  if (saved) {
+    if (saved.status === "paired" && saved.partner) {
+      showPaired(saved.actionText, saved.partner);
+    } else if (saved.status === "waiting") {
+      showWaiting(saved.actionText);
+      startPolling(saved.id, saved.actionText);
+      checkStatus(saved.id).catch(() => {});
+    }
+  }
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -201,21 +331,7 @@ const session = Astro.url.searchParams.get("session") ?? defaultWorkshopSession;
         throw new Error(data.error ?? "Submission failed");
       }
 
-      formWrap?.classList.add("hidden");
-
-      if (data.status === "paired") {
-        (document.getElementById("success-my-action") as HTMLElement).textContent = data.commitment.actionText;
-        (document.getElementById("success-partner-name") as HTMLElement).textContent = data.partner.name;
-        (document.getElementById("success-partner-action") as HTMLElement).textContent = data.partner.actionText;
-        (document.getElementById("success-partner-blocker") as HTMLElement).textContent =
-          `Blocker: ${data.partner.blocker}`;
-        pairedWrap?.classList.remove("hidden");
-      } else {
-        (document.getElementById("waiting-my-action") as HTMLElement).textContent = data.commitment.actionText;
-        waitingWrap?.classList.remove("hidden");
-      }
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      handleSubmitResponse(data);
     } catch (err) {
       if (errorEl) {
         errorEl.textContent = err instanceof Error ? err.message : "Something went wrong. Please try again.";
