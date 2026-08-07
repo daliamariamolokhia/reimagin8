@@ -6,6 +6,19 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Apex → www (primary domain set in Netlify UI)
+[[redirects]]
+  from = "http://reimagin8.com/*"
+  to = "https://www.reimagin8.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://reimagin8.com/*"
+  to = "https://www.reimagin8.com/:splat"
+  status = 301
+  force = true
+
 # Scheduled: daily at 08:00 UTC — nudges + day-7 check-ins
 [functions."commitment-cron"]
   schedule = "0 8 * * *"

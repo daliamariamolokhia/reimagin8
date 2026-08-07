@@ -13,7 +13,7 @@ Items to revisit once the core site is live. Ping the agent with "let's work thr
 
 - [ ] Persist day-7 check-in responses to Supabase (currently logged only)
 - [ ] Admin view to see workshop commitments and pairings
-- [ ] Custom domain + Resend domain verification for `hello@reimagin8.com`
+- [ ] Custom domain — see `DOMAIN-SETUP.md` (Resend verification for `workshop@reimagin8.com`)
 - [ ] Replace placeholder stats on homepage with real numbers
 
 ## Completed
