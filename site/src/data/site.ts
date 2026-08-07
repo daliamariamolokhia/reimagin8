@@ -2,11 +2,11 @@ export const site = {
   name: "reimagin8",
   tagline: "Reimagine. Reinvent. Realise.",
   description:
-    "For founders at an inflection point, boards facing disruption, and businesses that feel they've stagnated — we combine strategy, innovation, and leadership development to turn ambition into action.",
+    "Reimagine. Reinvent. Realise. — for founders at an inflection point, boards facing disruption, and businesses ready to turn ambition into action.",
   url: "https://www.reimagin8.com",
   email: "hello@reimagin8.com",
   hero: {
-    eyebrow: "Strategy · Innovation · Leadership",
+    eyebrow: "Reimagine · Reinvent · Realise",
     headline: "Your transformation partner — from insight to impact.",
     subline:
       "For founders at an inflection point, boards facing disruption, and businesses that feel they've stagnated.",
@@ -18,35 +18,55 @@ export const site = {
 export const navLinks = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
-  { href: "/approach", label: "Approach" },
+  { href: "/build", label: "Build" },
   { href: "/workshops", label: "Experiences" },
+  { href: "/approach", label: "Approach" },
   { href: "/contact", label: "Contact" },
 ];
 
 export const services = [
   {
+    slug: "strategy",
     title: "Strategy & Advisory",
     description:
       "Board-level counsel on growth, market positioning, and transformation — rigorous analysis paired with real-world execution.",
     icon: "compass",
+    pillar: "reimagine" as const,
   },
   {
+    slug: "innovation",
     title: "Innovation Studio",
     description:
       "From opportunity mapping to prototype validation. We help you move from insight to action — closing the gap between knowing and doing.",
     icon: "spark",
+    pillar: "reimagine" as const,
   },
   {
+    slug: "design",
     title: "Design & Experience",
     description:
       "Human-centred design for products, services, and organisational change. Clarity in complexity, beauty in purpose.",
     icon: "layers",
+    pillar: "reinvent" as const,
+    reinventTrack: "business" as const,
   },
   {
+    slug: "leadership",
     title: "Leadership Development",
     description:
       "Executive coaching, team workshops, and capability building for leaders navigating growth, disruption, and reinvention.",
     icon: "growth",
+    pillar: "reinvent" as const,
+    reinventTrack: "personal" as const,
+  },
+  {
+    slug: "product-build",
+    title: "Product Build",
+    description:
+      "Web applications from validated idea to production — strategy and engineering in one team, so the prototype doesn't die in the deck.",
+    icon: "code",
+    href: "/build",
+    pillar: "realise" as const,
   },
 ];
 
@@ -54,24 +74,204 @@ export const approachSteps = [
   {
     step: "01",
     title: "Diagnose",
+    pillar: "reimagine" as const,
     description: "Deep discovery into your growth gap — where ambition meets reality, and where opportunity hides in plain sight.",
   },
   {
     step: "02",
     title: "Design",
+    pillar: "reinvent" as const,
     description: "Co-create strategy, prototypes, and roadmaps with your leadership team. No ivory-tower decks — actionable from day one.",
   },
   {
     step: "03",
     title: "Deliver",
+    pillar: "realise" as const,
     description: "Embedded support through implementation. We stay until the change sticks and the results show.",
   },
   {
     step: "04",
     title: "Develop",
+    pillar: "realise" as const,
     description: "Build lasting capability inside your organisation so reinvention becomes a core competence, not a one-off project.",
   },
 ];
+
+export const threePillars = [
+  {
+    id: "reimagine",
+    name: "Reimagine",
+    headline: "See clearly before you commit.",
+    description:
+      "Diagnose the growth gap, map opportunity, and create shared language — insight and strategy before action. Engage here alone, or as the starting point for a longer journey.",
+    cta: { label: "Explore Reimagine", href: "/services#reimagine" },
+  },
+  {
+    id: "reinvent",
+    name: "Reinvent",
+    headline: "Change how you lead — and how the business operates.",
+    description:
+      "Personal reinvention for leaders. Business reinvention for teams. Forcing functions, workshops, and design-led change — from individual growth edge to board-ready strategic bets.",
+    cta: { label: "Explore Reinvent", href: "/workshops" },
+    tracks: [
+      { id: "personal", label: "Personal", description: "Leadership, coaching, and individual transformation." },
+      { id: "business", label: "Business", description: "Teams, organisations, and strategic reinvention." },
+    ],
+  },
+  {
+    id: "realise",
+    name: "Realise",
+    headline: "Ship what you decided.",
+    description:
+      "Build, activate, and embed — production web apps, sprint-to-ship, and accountability loops. Where ideation meets execution and the prototype doesn't die in the deck.",
+    cta: { label: "Explore Realise", href: "/build" },
+  },
+] as const;
+
+export type PillarId = (typeof threePillars)[number]["id"];
+
+export const pillarLabels: Record<PillarId, string> = {
+  reimagine: "Reimagine",
+  reinvent: "Reinvent",
+  realise: "Realise",
+};
+
+export const offeringsByPillar = {
+  reimagine: [
+    { name: "Strategy & Advisory", kind: "Service" },
+    { name: "Innovation Studio", kind: "Service" },
+    { name: "The Growth Gap", kind: "Experience", href: "/workshops#growth-gap" },
+    { name: "The Intersection Lab", kind: "Experience", href: "/workshops#bespoke" },
+    { name: "The Edge Session", kind: "Experience", href: "/workshops#bespoke" },
+  ],
+  reinvent: {
+    personal: [{ name: "Leadership Development", kind: "Service" }],
+    business: [
+      { name: "Design & Experience", kind: "Service" },
+      { name: "The Reinvention Sprint", kind: "Experience", href: "/workshops#reinvention-sprint" },
+      { name: "The Forcing Function", kind: "Experience", href: "/workshops#bespoke" },
+      { name: "The Studio Intensive", kind: "Experience", href: "/workshops#bespoke" },
+    ],
+  },
+  realise: [
+    { name: "Product Build", kind: "Service", href: "/build" },
+    { name: "MVP Build", kind: "Build format", href: "/build#mvp-build" },
+    { name: "Sprint to Ship", kind: "Build format", href: "/build#sprint-to-ship" },
+    { name: "The Activation Room", kind: "Experience", href: "/workshops#bespoke" },
+    { name: "Proof of Concept", kind: "Build format", href: "/build#bespoke" },
+    { name: "Product Partner", kind: "Build format", href: "/build#bespoke" },
+  ],
+};
+
+export const flagshipBuildFormats = [
+  {
+    slug: "mvp-build",
+    title: "MVP Build",
+    subtitle: "Validated idea → production v1",
+    description:
+      "For founders and leadership teams with a clear problem and no build capacity. We scope ruthlessly, design the core journeys, and ship a production web app — auth, data, deploy, handover. Strategy in the room; code in production. Not a slide-deck prototype.",
+    duration: "8–12 weeks",
+    audience: "Founders, product leaders, teams post-strategy",
+    delivery: "Fixed scope · senior-led delivery",
+    pillar: "realise" as const,
+    outcomes: [
+      "Production web app — deployed, documented, yours to own",
+      "Core user journeys live, not a clickable mockup",
+      "Technical and product decisions recorded — not tribal knowledge",
+      "A codebase and stack chosen for speed now, maintainability later",
+    ],
+  },
+  {
+    slug: "sprint-to-ship",
+    title: "Sprint to Ship",
+    subtitle: "Workshop output → working software in two weeks",
+    description:
+      "For teams who've named the bet in the room — Growth Gap, Reinvention Sprint, or innovation workshop — and need it live before momentum dies. We take your prioritised initiative and ship a working v1: real users, real data, real feedback loop.",
+    duration: "2 weeks",
+    audience: "Teams with a clear post-workshop initiative",
+    delivery: "Post-experience · tightly scoped",
+    pillar: "realise" as const,
+    outcomes: [
+      "Workshop commitment translated into shipped software",
+      "One critical journey end-to-end — not feature soup",
+      "Live URL for internal or pilot users within 10 working days",
+      "Clear path to MVP Build if the bet validates",
+    ],
+  },
+];
+
+export const bespokeBuildFormats = [
+  {
+    slug: "proof-of-concept",
+    title: "Proof of Concept",
+    tagline: "One journey. Real users. Learn before you commit.",
+    duration: "2–4 weeks",
+    audience: "Teams testing a bet before full build",
+    pillar: "realise" as const,
+  },
+  {
+    slug: "product-partner",
+    title: "Product Partner",
+    tagline: "Embedded build capacity — roadmap, ship, iterate.",
+    duration: "Ongoing retainer",
+    audience: "Founders with live product, need senior build leadership",
+    pillar: "realise" as const,
+  },
+];
+
+export const buildPortfolio = [
+  {
+    name: "AgencyLeak",
+    category: "Contingent workforce platform",
+    description:
+      "Web application for businesses managing contingent workforce — scheduling, compliance, and operations in one place. Built as a production platform; scales from MVP to full product.",
+  },
+];
+
+export const buildEntryPaths = [
+  {
+    title: "You have an idea",
+    description:
+      "Standalone enquiry. Bring the problem — we'll help sharpen scope, validate the bet, and ship an MVP or proof of concept.",
+    cta: "Discuss an MVP build",
+    href: "/contact?interest=mvp-build",
+  },
+  {
+    title: "You named the bet in the room",
+    description:
+      "Downstream of a workshop or advisory engagement. The initiative is prioritised — we build it before the urgency fades.",
+    cta: "Discuss Sprint to Ship",
+    href: "/contact?interest=sprint-to-ship",
+  },
+];
+
+export const buildPage = {
+  hero: {
+    eyebrow: "Realise",
+    title: "Ideation meets execution.",
+    intro:
+      "Web applications built where strategy and shipping overlap — for founders and teams who've done the thinking (or need a partner who'll do it with them). No agency handoff. No six-month spec before a line of code.",
+  },
+  signature: {
+    eyebrow: "Build formats",
+    title: "From bet to browser.",
+    intro:
+      "Two proven paths — standalone MVP or post-workshop sprint. Scope and fit on enquiry; every build starts with a conversation.",
+  },
+  bespoke: {
+    eyebrow: "Extend the engagement",
+    title: "Test first. Partner long-term.",
+    intro: "Proof of concept before a full MVP, or embedded product partnership once you're live.",
+  },
+  proof: {
+    eyebrow: "From our portfolio",
+    title: "We ship — not just advise.",
+  },
+  cta: {
+    title: "Ready to build?",
+    intro: "Select engagements each quarter. Bring the problem or the workshop output — we'll tell you honestly if we're the right fit.",
+  },
+};
 
 export const flagshipExperiences = [
   {
@@ -83,6 +283,7 @@ export const flagshipExperiences = [
     duration: "Half day",
     audience: "Leadership teams, C-suite, growth-stage founders",
     delivery: "Private · your organisation only",
+    pillar: "reimagine" as const,
     outcomes: [
       "One shared language for your growth stage — and the crisis coming next",
       "Blockers named with evidence, not politeness",
@@ -99,6 +300,8 @@ export const flagshipExperiences = [
     duration: "Full day",
     audience: "Executive teams, founders, boards at inflection",
     delivery: "Private · configured to your sector",
+    pillar: "reinvent" as const,
+    reinventTrack: "business" as const,
     outcomes: [
       "An honest read on stagnation — no consensus theatre",
       "Three bets: kill, keep, invent — ready for the board",
@@ -115,6 +318,8 @@ export const bespokeFormats = [
     tagline: "The decision your board keeps deferring — made before you leave.",
     duration: "2–3 hours",
     audience: "Boards & executive teams",
+    pillar: "reinvent" as const,
+    reinventTrack: "business" as const,
   },
   {
     slug: "intersection-lab",
@@ -122,6 +327,7 @@ export const bespokeFormats = [
     tagline: "Strategy, product, ops, people — mapped where they collide. Growth hides in the friction.",
     duration: "Half day",
     audience: "Cross-functional leadership",
+    pillar: "reimagine" as const,
   },
   {
     slug: "studio-intensive",
@@ -129,6 +335,8 @@ export const bespokeFormats = [
     tagline: "48 hours. Two prototypes. One gets resourced Monday.",
     duration: "2 days",
     audience: "12–20 leaders · select cohorts",
+    pillar: "reinvent" as const,
+    reinventTrack: "business" as const,
   },
   {
     slug: "activation-room",
@@ -136,6 +344,7 @@ export const bespokeFormats = [
     tagline: "You committed. Did you move? What stopped you? What's next?",
     duration: "Half day",
     audience: "Post–Growth Gap or Sprint teams",
+    pillar: "realise" as const,
   },
   {
     slug: "edge-session",
@@ -143,6 +352,7 @@ export const bespokeFormats = [
     tagline: "What's about to hit your sector — and who's in this room actually ready.",
     duration: "Half day · evening",
     audience: "Invite-only · capped seats",
+    pillar: "reimagine" as const,
   },
 ];
 
@@ -150,21 +360,25 @@ export const bespokeFormats = [
 export const experienceHighlights = [
   {
     title: "The Growth Gap",
+    pillar: "reimagine" as const,
     oneLiner: "Public commitments. Shared language. Everyone who missed the room is already behind.",
     href: "/workshops#growth-gap",
   },
   {
     title: "The Reinvention Sprint",
+    pillar: "reinvent" as const,
     oneLiner: "Three bets. Named owners. 5pm — or another quarter of drift.",
     href: "/workshops#reinvention-sprint",
   },
   {
     title: "The Studio Intensive",
+    pillar: "reinvent" as const,
     oneLiner: "Two ideas that didn't exist Thursday. One is funded by Monday.",
     href: "/workshops#bespoke",
   },
   {
     title: "The Forcing Function",
+    pillar: "reinvent" as const,
     oneLiner: "Most offsites produce actions. This one produces a decision.",
     href: "/workshops#bespoke",
   },
@@ -172,10 +386,10 @@ export const experienceHighlights = [
 
 export const experiencesPage = {
   hero: {
-    eyebrow: "Experiences",
+    eyebrow: "Reimagine & Reinvent",
     title: "Forcing functions. Not away days.",
     intro:
-      "Private sessions for leaders who've read the book and still haven't moved. Harvard-grade rigour, psychology and neuroscience in the room, configured for your organisation — not a catalogue event.",
+      "Private sessions across insight and reinvention — for leaders who've read the book and still haven't moved. Harvard-grade rigour, psychology in the room, configured for your organisation.",
   },
   signature: {
     eyebrow: "Signature formats",
@@ -196,24 +410,26 @@ export const experiencesPage = {
   },
 };
 
-/** Contact form interest dropdown — services + experiences */
+/** Contact form interest dropdown — grouped by the three pillars */
 export const contactInterestOptions = [
   { value: "discovery", label: "Discovery call", group: "General" },
-  { value: "strategy", label: "Strategy & Advisory", group: "Advisory" },
-  { value: "innovation", label: "Innovation Studio", group: "Advisory" },
-  { value: "design", label: "Design & Experience", group: "Advisory" },
-  { value: "leadership", label: "Leadership Development", group: "Advisory" },
-  ...flagshipExperiences.map((e) => ({
-    value: e.slug,
-    label: e.title,
-    group: "Experiences · signature",
-  })),
-  ...bespokeFormats.map((f) => ({
-    value: f.slug,
-    label: f.title,
-    group: "Experiences · bespoke",
-  })),
-  { value: "bespoke", label: "Custom experience (tell us your brief)", group: "Experiences · bespoke" },
+  { value: "strategy", label: "Strategy & Advisory", group: "Reimagine" },
+  { value: "innovation", label: "Innovation Studio", group: "Reimagine" },
+  { value: "growth-gap", label: "The Growth Gap", group: "Reimagine" },
+  { value: "intersection-lab", label: "The Intersection Lab", group: "Reimagine" },
+  { value: "edge-session", label: "The Edge Session", group: "Reimagine" },
+  { value: "leadership", label: "Leadership Development", group: "Reinvent · personal" },
+  { value: "design", label: "Design & Experience", group: "Reinvent · business" },
+  { value: "reinvention-sprint", label: "The Reinvention Sprint", group: "Reinvent · business" },
+  { value: "forcing-function", label: "The Forcing Function", group: "Reinvent · business" },
+  { value: "studio-intensive", label: "The Studio Intensive", group: "Reinvent · business" },
+  { value: "bespoke", label: "Custom experience (tell us your brief)", group: "Reinvent · business" },
+  { value: "product-build", label: "Product Build (general enquiry)", group: "Realise" },
+  { value: "mvp-build", label: "MVP Build", group: "Realise" },
+  { value: "sprint-to-ship", label: "Sprint to Ship", group: "Realise" },
+  { value: "proof-of-concept", label: "Proof of Concept", group: "Realise" },
+  { value: "product-partner", label: "Product Partner", group: "Realise" },
+  { value: "activation-room", label: "The Activation Room", group: "Realise" },
 ];
 
 export const contactInterestValues = new Set<string>(
@@ -243,17 +459,23 @@ export const clients = [
 ];
 
 export const homeSections = {
-  services: {
-    eyebrow: "What we do",
-    title: "Strategy, innovation, design, and leadership — integrated.",
+  pillars: {
+    eyebrow: "How we work",
+    title: "Reimagine. Reinvent. Realise.",
     intro:
-      "Not a slide deck and a handshake. One partner across four disciplines, embedded with your team until the change sticks.",
+      "Three clear ways to engage — alone or as a journey. Start where you're stuck; stay as long as you need.",
+  },
+  services: {
+    eyebrow: "By pillar",
+    title: "Every offering has a home.",
+    intro:
+      "Advisory, experiences, and build — mapped to the stage you're at, not a laundry list of services.",
   },
   workshop: {
-    eyebrow: "Experiences",
+    eyebrow: "Reinvent",
     title: "For teams that can't afford another away day",
     intro:
-      "Private forcing functions — strategy, psychology, leadership. The people who miss the room feel it.",
+      "Private forcing functions — personal or business reinvention. The people who miss the room feel it.",
   },
   approach: {
     eyebrow: "Our approach",

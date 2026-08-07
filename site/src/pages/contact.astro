@@ -4,8 +4,9 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { calendlyUrl, contactInterestOptions, contactInterestValues, site } from "../data/site";
 
-const experienceParam = Astro.url.searchParams.get("experience") ?? "";
-const selectedInterest = contactInterestValues.has(experienceParam) ? experienceParam : "discovery";
+const interestParam =
+  Astro.url.searchParams.get("interest") ?? Astro.url.searchParams.get("experience") ?? "";
+const selectedInterest = contactInterestValues.has(interestParam) ? interestParam : "discovery";
 
 const interestGroups = contactInterestOptions.reduce<
   Record<string, typeof contactInterestOptions[number][]>

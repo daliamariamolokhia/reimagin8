@@ -1,0 +1,40 @@
+---
+interface Props {
+  pillar: "reimagine" | "reinvent" | "realise";
+  track?: "personal" | "business";
+  variant?: "light" | "dark";
+  class?: string;
+}
+
+const { pillar, track, variant = "light", class: className = "" } = Astro.props;
+
+const labels: Record<Props["pillar"], string> = {
+  reimagine: "Reimagine",
+  reinvent: track === "personal" ? "Reinvent · personal" : track === "business" ? "Reinvent · business" : "Reinvent",
+  realise: "Realise",
+};
+
+const colorsLight: Record<Props["pillar"], string> = {
+  reimagine: "bg-sky/15 text-navy-800 border-sky/30",
+  reinvent: "bg-coral/15 text-coral-dark border-coral/30",
+  realise: "bg-navy-900/10 text-navy-800 border-navy-900/20",
+};
+
+const colorsDark: Record<Props["pillar"], string> = {
+  reimagine: "bg-sky/20 text-sky-light border-sky/40",
+  reinvent: "bg-coral/20 text-coral border-coral/40",
+  realise: "bg-white/10 text-white/90 border-white/20",
+};
+
+const colors = variant === "dark" ? colorsDark : colorsLight;
+---
+
+<span
+  class:list={[
+    "inline-block rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-widest",
+    colors[pillar],
+    className,
+  ]}
+>
+  {labels[pillar]}
+</span>
