@@ -68,6 +68,22 @@ export const services = [
     href: "/build",
     pillar: "realise" as const,
   },
+  {
+    slug: "execution",
+    title: "Execution & Delivery",
+    description:
+      "Embedded support through implementation. We stay with your team until initiatives land, change sticks, and the results are visible.",
+    icon: "compass",
+    pillar: "realise" as const,
+  },
+  {
+    slug: "transformation",
+    title: "Transformation Programmes",
+    description:
+      "End-to-end programmes that turn strategic bets into organisational change: adoption, governance, capability, and measurable outcomes.",
+    icon: "growth",
+    pillar: "realise" as const,
+  },
 ];
 
 export const approachSteps = [
@@ -123,12 +139,36 @@ export const threePillars = [
   {
     id: "realise",
     name: "Realise",
-    headline: "Ship what you decided.",
+    headline: "Turn decisions into outcomes.",
     description:
-      "Build, activate, and embed. Where ideation meets execution and the prototype doesn't die in the deck.",
-    cta: { label: "Explore Realise", href: "/build" },
+      "Build, activate, and embed. Where ideation meets execution and the prototype doesn't die in the deck. Realise is shipped solutions, accountable execution, embedded transformation, and outputs you can measure. Software when the bet demands it. Always more than a build.",
+    cta: { label: "Explore Realise", href: "/services#realise" },
   },
 ] as const;
+
+/** What Realise covers beyond any single deliverable */
+export const realiseDimensions = [
+  {
+    title: "Execution",
+    description: "Initiatives owned, milestones hit, momentum kept. We embed until the work is done.",
+  },
+  {
+    title: "Outcomes & outputs",
+    description: "Board-ready results, not activity reports. Clear signals that the bet is working.",
+  },
+  {
+    title: "Solutions",
+    description: "Products, platforms, operating models, and tools. Built, configured, or delivered to spec.",
+  },
+  {
+    title: "Transformation",
+    description: "Change that sticks: capability, culture, and systems aligned to the new direction.",
+  },
+  {
+    title: "Activation",
+    description: "Commitments honoured, blockers cleared, next moves named. The forcing function after the workshop.",
+  },
+];
 
 export type PillarId = (typeof threePillars)[number]["id"];
 
@@ -156,6 +196,8 @@ export const offeringsByPillar = {
     ],
   },
   realise: [
+    { name: "Execution & Delivery", kind: "Service" },
+    { name: "Transformation Programmes", kind: "Service" },
     { name: "Product Build", kind: "Service", href: "/build" },
     { name: "MVP Build", kind: "Build format", href: "/build#mvp-build" },
     { name: "Sprint to Ship", kind: "Build format", href: "/build#sprint-to-ship" },
@@ -252,7 +294,7 @@ export const buildPage = {
     eyebrow: "Realise",
     title: "Ideation meets execution.",
     intro:
-      "Web applications built where strategy and shipping overlap, for founders and teams who've done the thinking (or need a partner who'll do it with them). No agency handoff. No six-month spec before a line of code.",
+      "One path within Realise. When the bet needs a production web app, we build it: strategy and engineering in one team. Realise is broader than build alone. See services for execution, transformation, and activation.",
   },
   signature: {
     eyebrow: "Build formats",
@@ -428,6 +470,8 @@ export const contactInterestOptions = [
   { value: "studio-intensive", label: "The Studio Intensive", group: "Reinvent · business" },
   { value: "bespoke", label: "Custom experience (tell us your brief)", group: "Reinvent · business" },
   { value: "product-build", label: "Product Build (general enquiry)", group: "Realise" },
+  { value: "execution", label: "Execution & Delivery", group: "Realise" },
+  { value: "transformation", label: "Transformation Programmes", group: "Realise" },
   { value: "mvp-build", label: "MVP Build", group: "Realise" },
   { value: "sprint-to-ship", label: "Sprint to Ship", group: "Realise" },
   { value: "proof-of-concept", label: "Proof of Concept", group: "Realise" },
