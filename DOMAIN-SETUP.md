@@ -164,6 +164,7 @@ Checklist:
 | Problem | Fix |
 |---------|-----|
 | **“Pending DNS verification” for hours** | Double-check CNAME `www` and `@` records; remove old A records pointing elsewhere |
+| **“Not secure” in browser** | Use `https://www.reimagin8.com` (not `http://`). In Netlify → **Domain management**, set **www** as primary and wait for HTTPS certificate **Ready**. Clear browser cache or try Incognito. |
 | **SSL certificate pending** | DNS must be correct first; can take up to 24h |
 | **Site still shows old Netlify URL in QR** | Redeploy after changing `PUBLIC_SITE_URL` |
 | **Emails not sending** | Resend domain not verified, or `RESEND_API_KEY` missing on deploy |

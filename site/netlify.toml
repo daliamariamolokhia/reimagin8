@@ -6,7 +6,13 @@
 [build.environment]
   NODE_VERSION = "22"
 
-# Apex → www (primary domain set in Netlify UI)
+# Apex and www → canonical HTTPS www
+[[redirects]]
+  from = "http://www.reimagin8.com/*"
+  to = "https://www.reimagin8.com/:splat"
+  status = 301
+  force = true
+
 [[redirects]]
   from = "http://reimagin8.com/*"
   to = "https://www.reimagin8.com/:splat"
@@ -19,13 +25,28 @@
   status = 301
   force = true
 
-# Scheduled: daily at 08:00 UTC — nudges + day-7 check-ins
+# Netlify default URL → custom domain (always secure canonical)
+[[redirects]]
+  from = "http://reimagin8.netlify.app/*"
+  to = "https://www.reimagin8.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://reimagin8.netlify.app/*"
+  to = "https://www.reimagin8.com/:splat"
+  status = 301
+  force = true
+
+# Scheduled: daily at 08:00 UTC, nudges + day-7 check-ins
 [functions."commitment-cron"]
   schedule = "0 8 * * *"
 
 [[headers]]
   for = "/*"
   [headers.values]
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Content-Security-Policy = "upgrade-insecure-requests"
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"

@@ -18,7 +18,7 @@ function fromAddress() {
 }
 
 function siteUrl() {
-  return process.env.PUBLIC_SITE_URL?.trim() || "https://reimagin8.netlify.app";
+  return process.env.PUBLIC_SITE_URL?.trim() || "https://www.reimagin8.com";
 }
 
 function firstName(name: string) {
