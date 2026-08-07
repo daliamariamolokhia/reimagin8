@@ -11,8 +11,8 @@ const { title, description = site.description } = Astro.props;
 
 const fullTitle =
   title === "Home"
-    ? `${site.name} — ${site.tagline}`
-    : `${title} — ${site.name}`;
+    ? `${site.name} | ${site.tagline}`
+    : `${title} | ${site.name}`;
 ---
 
 <!doctype html>

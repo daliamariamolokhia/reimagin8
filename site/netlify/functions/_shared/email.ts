@@ -67,7 +67,7 @@ async function sendEmail(
   }
 }
 
-/** Immediate confirmation — every person who submits gets this */
+/** Immediate confirmation: every person who submits gets this */
 export async function sendSubmissionConfirmation(
   commitment: Commitment,
   state: "waiting" | "paired",
@@ -81,17 +81,17 @@ export async function sendSubmissionConfirmation(
   if (state === "waiting") {
     return sendEmail(
       commitment.email,
-      "Commitment received — waiting for your accountability partner",
+      "Commitment received: waiting for your accountability partner",
       `
         <p>Hi ${name},</p>
         <p>Your commitment card from the Growth Gap workshop is saved.</p>
         <h3>Your action (next 7 days)</h3>
         <p><strong>${action}</strong></p>
         <p><em>How they'll know: ${note}</em></p>
-        <p>You're in the queue — as soon as the next person submits, we'll pair you up and send another email with their card.</p>
+        <p>You're in the queue. As soon as the next person submits, we'll pair you up and send another email with their card.</p>
         <p>Keep your commitment page open; it will update automatically when you're paired.</p>
         <p><a href="${checkInUrl}">Your day-7 check-in link</a> (save this for next week)</p>
-        <p>— reimagin8</p>
+        <p>reimagin8</p>
       `,
     );
   }
@@ -106,7 +106,7 @@ export async function sendSubmissionConfirmation(
 
   return sendEmail(
     commitment.email,
-    "Cards traded — your accountability partner is confirmed",
+    "Cards traded: your accountability partner is confirmed",
     `
       <p>Hi ${name},</p>
       <p>Your commitment is live. You've been paired with someone in the room.</p>
@@ -119,7 +119,7 @@ export async function sendSubmissionConfirmation(
       <p><em>Their blocker:</em> ${partnerBlocker}</p>
       <p>We'll nudge you every few days to check in. In 7 days, connect and share progress.</p>
       <p><a href="${checkInUrl}">Day-7 check-in link</a></p>
-      <p>— reimagin8</p>
+      <p>reimagin8</p>
     `,
   );
 }
@@ -147,7 +147,7 @@ export async function sendNudgeEmail(holder: Commitment, partner: Commitment): P
       <p><strong>Their commitment:</strong> ${partnerAction}</p>
       <p>Have you checked in? A quick message goes a long way.</p>
       <p>Don't forget your own action: <strong>${holderAction}</strong></p>
-      <p>— reimagin8</p>
+      <p>reimagin8</p>
     `,
   );
 }
@@ -159,15 +159,15 @@ export async function sendDay7Email(holder: Commitment, partner: Commitment): Pr
 
   return sendEmail(
     [holder.email, partner.email],
-    "Day 7 — time to connect on your commitments",
+    "Day 7: time to connect on your commitments",
     `
       <p>Hi ${name} and ${partnerName},</p>
       <p>Seven days ago you traded commitment cards. Today is the forcing function.</p>
       <p><strong>${name} committed to:</strong> ${escapeHtml(holder.action_text)}</p>
       <p><strong>${partnerName} committed to:</strong> ${escapeHtml(partner.action_text)}</p>
-      <p>Connect today — ask each other: <em>Did you do it? What got in the way? What's next?</em></p>
+      <p>Connect today. Ask each other: <em>Did you do it? What got in the way? What's next?</em></p>
       <p><a href="${checkInUrl}">Submit your day-7 update</a></p>
-      <p>— reimagin8</p>
+      <p>reimagin8</p>
     `,
   );
 }

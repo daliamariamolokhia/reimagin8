@@ -82,7 +82,7 @@ import Layout from "../../layouts/Layout.astro";
   const form = document.getElementById("checkin-form") as HTMLFormElement;
 
   if (!token) {
-    if (loading) loading.textContent = "Invalid link — use the URL from your day-7 email.";
+    if (loading) loading.textContent = "Invalid link. Use the URL from your day-7 email.";
   } else {
     fetch(`/.netlify/functions/commitment-checkin?token=${encodeURIComponent(token)}`)
       .then((r) => r.json())
