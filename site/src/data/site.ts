@@ -561,7 +561,10 @@ export const homeSections = {
 export const defaultWorkshopSession =
   import.meta.env.PUBLIC_DEFAULT_WORKSHOP_SESSION ?? "growth-gap-2026-08-04";
 
-const rawCalendlyUrl = (import.meta.env.PUBLIC_CALENDLY_URL ?? "").trim();
+/** Override with PUBLIC_CALENDLY_URL in Netlify for a single event-type link. */
+const DEFAULT_CALENDLY_URL = "https://calendly.com/daliamaria-molokhia";
+
+const rawCalendlyUrl = (import.meta.env.PUBLIC_CALENDLY_URL ?? DEFAULT_CALENDLY_URL).trim();
 
 /** Full Calendly event URL — set PUBLIC_CALENDLY_URL in Netlify (and local .env for dev). */
 export const calendlyUrl = rawCalendlyUrl;

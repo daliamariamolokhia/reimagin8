@@ -8,11 +8,13 @@ The contact page embeds your Calendly **event link**. Header and homepage CTAs l
 2. **Event types** → open your discovery call (e.g. 30 minutes).
 3. **Share** → copy the **event link** (not only your profile URL).
 
-Example shape:
+Current profile (shows your event types):
 
 ```
-https://calendly.com/your-name/discovery-call
+https://calendly.com/daliamaria-molokhia
 ```
+
+For one event only, use the event link from **Share** on that event type, e.g. `https://calendly.com/daliamaria-molokhia/discovery-call`.
 
 ## 2 — Add to Netlify
 
