@@ -1,5 +1,5 @@
 ---
-import { navLinks, site } from "../data/site";
+import { calendlyBookHref, calendlyUrl, navLinks, site } from "../data/site";
 
 const currentPath = Astro.url.pathname;
 ---
@@ -35,6 +35,16 @@ const currentPath = Astro.url.pathname;
     </nav>
 
     <div class="flex items-center gap-3">
+      {
+        calendlyUrl ? (
+          <a
+            href={calendlyBookHref}
+            class="hidden text-sm font-medium text-navy-900 transition hover:text-coral md:inline-block"
+          >
+            Book a call
+          </a>
+        ) : null
+      }
       <a
         href="/contact"
         class="hidden rounded-full bg-navy-900 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-navy-950 sm:inline-block"
@@ -56,6 +66,16 @@ const currentPath = Astro.url.pathname;
                 {link.label}
               </a>
             ))
+          }
+          {
+            calendlyUrl ? (
+              <a
+                href={calendlyBookHref}
+                class="mt-2 block rounded-lg border border-surface px-3 py-2 text-center text-sm font-medium text-navy-900"
+              >
+                Book a call
+              </a>
+            ) : null
           }
           <a
             href="/contact"

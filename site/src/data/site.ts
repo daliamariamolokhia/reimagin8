@@ -54,7 +54,7 @@ export const services = [
     slug: "leadership",
     title: "Leadership Development",
     description:
-      "Executive coaching, team workshops, and capability building for leaders navigating growth, disruption, and reinvention.",
+      "Experiential programmes for executives and teams: practice in the room, feedback loops, and behavioural change that carries into the business. Grounded in current learning design, not lecture theatre.",
     icon: "growth",
     pillar: "reinvent" as const,
     reinventTrack: "personal" as const,
@@ -86,6 +86,36 @@ export const services = [
   },
 ];
 
+/** How experiential learning, behaviour change, and learning design show up in delivery */
+export const learningApproach = {
+  eyebrow: "Learning in practice",
+  title: "Designed for behaviour change, not applause",
+  intro:
+    "Our experiences combine experiential learning with up-to-date learning design principles. We use technology sparingly and deliberately: to extend practice, accountability, and reflection after people leave the room.",
+  pillars: [
+    {
+      title: "Experiential learning",
+      description:
+        "Leaders learn by diagnosing their own growth gap, making bets under pressure, and practising the conversations they have been avoiding. Insight comes from action, reflection, and peer witness.",
+    },
+    {
+      title: "Behavioural change",
+      description:
+        "We name knowing–doing blockers, socialise commitments, and design follow-through so new behaviours have a chance to stick. Psychology and organisation design in the same session.",
+    },
+    {
+      title: "Learning design",
+      description:
+        "Clear outcomes, spaced practice, retrieval, and feedback loops. Formats are built from current evidence on how adults learn at work, not legacy offsite templates.",
+    },
+    {
+      title: "Technology in learning",
+      description:
+        "Digital touchpoints where they help: pre-work, nudges, check-ins, and capture of commitments. Always in service of the in-room experience, never as a substitute for it.",
+    },
+  ],
+};
+
 export const approachSteps = [
   {
     step: "01",
@@ -99,7 +129,7 @@ export const approachSteps = [
     title: "Design",
     pillar: "reinvent" as const,
     description:
-      "Co-create strategy, prototypes, and roadmaps with your leadership team. No ivory-tower decks. Actionable from day one.",
+      "Co-create strategy, prototypes, and roadmaps with your leadership team. Experiential sprints and learning design that favour doing over slides. Actionable from day one.",
   },
   {
     step: "03",
@@ -129,7 +159,7 @@ export const threePillars = [
     name: "Reinvent",
     headline: "Change how you lead and how the business operates.",
     description:
-      "Personal reinvention for leaders. Business reinvention for teams. Forcing functions, workshops, and design-led change: from individual growth edge to board-ready strategic bets.",
+      "Personal reinvention for leaders. Business reinvention for teams. Experiential workshops, behavioural change in the room, and design-led formats: from individual growth edge to board-ready strategic bets.",
     cta: { label: "Explore Reinvent", href: "/workshops" },
     tracks: [
       { id: "personal", label: "Personal", description: "Leadership, coaching, and individual transformation." },
@@ -162,11 +192,12 @@ export const realiseDimensions = [
   },
   {
     title: "Transformation",
-    description: "Change that sticks: capability, culture, and systems aligned to the new direction.",
+    description: "Behavioural change that sticks: capability, culture, and systems aligned to the new direction.",
   },
   {
     title: "Activation",
-    description: "Commitments honoured, blockers cleared, next moves named. The forcing function after the workshop.",
+    description:
+      "Commitments honoured, blockers cleared, next moves named. Follow-through supported with thoughtful use of technology where it reinforces learning, not where it replaces the human work.",
   },
 ];
 
@@ -320,7 +351,7 @@ export const flagshipExperiences = [
     title: "The Growth Gap",
     subtitle: "Why knowing still isn't doing",
     description:
-      "Your team knows what to do and still isn't doing it. We place you on Greiner's curve, name the knowing–doing blockers (and the psychology behind them), and lock in commitments witnessed in the room. Not inspiration. Diagnosis, language, movement.",
+      "Your team knows what to do and still isn't doing it. Experiential diagnosis on Greiner's curve: knowing–doing blockers, the psychology behind them, and commitments witnessed in the room. Not inspiration. Language, behavioural intent, movement.",
     audience: "Leadership teams, C-suite, growth-stage founders",
     delivery: "Private · your organisation only",
     pillar: "reimagine" as const,
@@ -423,19 +454,19 @@ export const experiencesPage = {
     eyebrow: "Reimagine & Reinvent",
     title: "Forcing functions. Not away days.",
     intro:
-      "Private sessions across insight and reinvention, for leaders who've read the book and still haven't moved. Harvard-grade rigour, psychology in the room, configured for your organisation.",
+      "Private, experiential sessions across insight and reinvention, for leaders who've read the book and still haven't moved. Harvard-grade rigour, behavioural science and learning design in the room, configured for your organisation.",
   },
   signature: {
     eyebrow: "Signature formats",
     title: "Proven. Configured. Delivered in-house.",
     intro:
-      "Two flagships with sector-relevant pre-work and examples. Scope and fit on enquiry. No price list, no open enrolment.",
+      "Two flagships with sector-relevant pre-work, in-session practice, and optional digital follow-through. Built on experiential learning and current learning design principles. Scope and fit on enquiry. No price list, no open enrolment.",
   },
   bespoke: {
     eyebrow: "Bespoke formats",
     title: "Your brief. Our methods.",
     intro:
-      "Stack formats, extend over weeks, or design from scratch across strategy, innovation, design, and leadership in one brief.",
+      "Stack formats, extend over time, or design from scratch across strategy, innovation, design, and leadership. Every bespoke brief is shaped for behavioural outcomes and how your people actually learn.",
   },
   cta: {
     title: "Private delivery only",
@@ -511,13 +542,13 @@ export const homeSections = {
     eyebrow: "Reinvent",
     title: "For teams that can't afford another away day",
     intro:
-      "Private forcing functions for personal or business reinvention. The people who miss the room feel it.",
+      "Experiential forcing functions for personal or business reinvention. Learning designed for behavioural change, not theatre. The people who miss the room feel it.",
   },
   approach: {
     eyebrow: "Our approach",
     title: "From insight to impact",
     intro:
-      "We don't deliver decks and disappear. Every engagement follows a proven path from diagnosis to lasting capability.",
+      "We don't deliver decks and disappear. Experiential learning, behavioural change, and learning design run through every phase, with technology used only where it strengthens follow-through.",
   },
   cta: {
     title: "Ready to reimagine?",
@@ -530,7 +561,28 @@ export const homeSections = {
 export const defaultWorkshopSession =
   import.meta.env.PUBLIC_DEFAULT_WORKSHOP_SESSION ?? "growth-gap-2026-08-04";
 
-export const calendlyUrl = import.meta.env.PUBLIC_CALENDLY_URL ?? "";
+const rawCalendlyUrl = (import.meta.env.PUBLIC_CALENDLY_URL ?? "").trim();
+
+/** Full Calendly event URL — set PUBLIC_CALENDLY_URL in Netlify (and local .env for dev). */
+export const calendlyUrl = rawCalendlyUrl;
+
+/** On-site anchor when embed is configured; otherwise general contact. */
+export const calendlyBookHref = rawCalendlyUrl ? "/contact#book-a-call" : "/contact";
+
+/** Inline widget URL with brand colours (build-time). */
+export function getCalendlyEmbedUrl(baseUrl = rawCalendlyUrl): string {
+  if (!baseUrl) return "";
+  try {
+    const url = new URL(baseUrl);
+    url.searchParams.set("hide_event_type_details", "1");
+    url.searchParams.set("hide_gdpr_banner", "1");
+    url.searchParams.set("primary_color", "FF6B35");
+    url.searchParams.set("text_color", "1A2B4A");
+    return url.toString();
+  } catch {
+    return baseUrl;
+  }
+}
 
 export const growthStages = [
   "Stage 1: Creativity / Crisis of Leadership",

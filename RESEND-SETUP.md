@@ -1,6 +1,11 @@
-# Email setup (Resend) — required for confirmation emails
+# Email setup (Resend) — contact form + workshop emails
 
-Workshop commitment emails use [Resend](https://resend.com). Without it, pairing still works but **no emails are sent**.
+The site uses [Resend](https://resend.com) for:
+
+- **Contact enquiries** — notification to you + auto-reply to the visitor
+- **Workshop commitments** — pairing confirmations, nudges, day-7 check-in
+
+Without `RESEND_API_KEY`, the contact form shows an error and workshop pairing still works but **no emails are sent**.
 
 ---
 
@@ -68,8 +73,17 @@ If you use Resend's test sender (`onboarding@resend.dev`) for now, emails will *
 |-----|--------|
 | `RESEND_API_KEY` | `re_...` your API key |
 | `COMMITMENT_FROM_EMAIL` | See Step 3 below |
+| `ENQUIRY_FROM_EMAIL` | e.g. `hello@reimagin8.com` (contact auto-replies; must be on verified domain) |
+| `CONTACT_NOTIFY_EMAIL` | Where enquiries land, e.g. `hello@reimagin8.com` |
 
 **Trigger deploy** after adding.
+
+### Contact form test
+
+1. Open [Contact](https://www.reimagin8.com/contact) and submit the enquiry form (not Calendly).
+2. You should receive a notification at `CONTACT_NOTIFY_EMAIL` and the visitor gets an auto-reply.
+3. If Resend is missing, the form asks them to email `hello@reimagin8.com` directly.
+4. Netlify → **Functions** → `contact-submit` → **Logs** for errors.
 
 ## Step 3 — From address
 

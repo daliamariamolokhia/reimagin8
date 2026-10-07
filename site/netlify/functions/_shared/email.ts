@@ -13,8 +13,21 @@ function getResend() {
   return new Resend(key);
 }
 
-function fromAddress() {
+function workshopFromAddress() {
   return process.env.COMMITMENT_FROM_EMAIL?.trim() || "onboarding@resend.dev";
+}
+
+function enquiryFromAddress() {
+  return (
+    process.env.ENQUIRY_FROM_EMAIL?.trim() ||
+    process.env.CONTACT_FROM_EMAIL?.trim() ||
+    process.env.COMMITMENT_FROM_EMAIL?.trim() ||
+    "onboarding@resend.dev"
+  );
+}
+
+function contactNotifyAddress() {
+  return process.env.CONTACT_NOTIFY_EMAIL?.trim() || "hello@reimagin8.com";
 }
 
 function siteUrl() {
@@ -37,6 +50,7 @@ async function sendEmail(
   to: string | string[],
   subject: string,
   html: string,
+  options?: { fromLabel?: string; fromEmail?: string; replyTo?: string },
 ): Promise<SendResult> {
   if (!isEmailConfigured()) {
     const msg = "RESEND_API_KEY is not set in Netlify environment variables";
@@ -44,13 +58,17 @@ async function sendEmail(
     return { ok: false, error: msg };
   }
 
+  const fromEmail = options?.fromEmail ?? workshopFromAddress();
+  const fromLabel = options?.fromLabel ?? "reimagin8 Workshop";
+
   try {
     const resend = getResend();
     const { data, error } = await resend.emails.send({
-      from: `reimagin8 Workshop <${fromAddress()}>`,
+      from: `${fromLabel} <${fromEmail}>`,
       to,
       subject,
       html,
+      replyTo: options?.replyTo,
     });
 
     if (error) {
@@ -182,4 +200,62 @@ export async function sendPairingEmails(
   ]);
 
   return { newPerson: newPersonResult, waitingPartner: waitingPartnerResult };
+}
+
+export type ContactEnquiryPayload = {
+  name: string;
+  email: string;
+  company?: string;
+  interest: string;
+  interestLabel: string;
+  message: string;
+};
+
+/** Notify team + auto-reply to visitor */
+export async function sendContactEnquiryEmails(
+  payload: ContactEnquiryPayload,
+): Promise<{ notify: SendResult; autoReply: SendResult }> {
+  const name = escapeHtml(payload.name.trim());
+  const email = payload.email.trim().toLowerCase();
+  const company = escapeHtml(payload.company?.trim() || "Not provided");
+  const interest = escapeHtml(payload.interestLabel);
+  const message = escapeHtml(payload.message.trim()).replace(/\n/g, "<br />");
+  const fromEmail = enquiryFromAddress();
+
+  const notify = await sendEmail(
+    contactNotifyAddress(),
+    `Enquiry: ${payload.interestLabel} — ${payload.name.trim()}`,
+    `
+      <p>New contact form submission on reimagin8.com</p>
+      <p><strong>Name:</strong> ${name}<br />
+      <strong>Email:</strong> ${escapeHtml(email)}<br />
+      <strong>Company:</strong> ${company}<br />
+      <strong>Interest:</strong> ${interest}</p>
+      <p><strong>Message:</strong></p>
+      <p>${message}</p>
+    `,
+    {
+      fromLabel: "reimagin8 Website",
+      fromEmail,
+      replyTo: email,
+    },
+  );
+
+  const first = escapeHtml(firstName(payload.name));
+  const autoReply = await sendEmail(
+    email,
+    "We received your enquiry — reimagin8",
+    `
+      <p>Hi ${first},</p>
+      <p>Thank you for getting in touch. We've received your message about <strong>${interest}</strong>.</p>
+      <p>We aim to respond within two business days. If your matter is urgent, reply to this email or book a discovery call from our contact page.</p>
+      <p>reimagin8<br />Reimagine · Reinvent · Realise</p>
+    `,
+    {
+      fromLabel: "reimagin8",
+      fromEmail,
+    },
+  );
+
+  return { notify, autoReply };
 }

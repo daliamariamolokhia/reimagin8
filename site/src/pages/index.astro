@@ -11,6 +11,8 @@ import {
   homeSections,
   offeringsByPillar,
   services,
+  calendlyBookHref,
+  calendlyUrl,
   site,
   stats,
   threePillars,
@@ -36,7 +38,17 @@ import {
         </p>
         <div class="mt-10 flex flex-wrap gap-4">
           <CtaButton href="/contact" size="lg">Start a conversation</CtaButton>
-          <CtaButton href="/workshops" variant="ghost" size="lg">Explore experiences</CtaButton>
+          {
+            calendlyUrl ? (
+              <CtaButton href={calendlyBookHref} variant="ghost" size="lg">
+                Book a discovery call
+              </CtaButton>
+            ) : (
+              <CtaButton href="/workshops" variant="ghost" size="lg">
+                Explore experiences
+              </CtaButton>
+            )
+          }
         </div>
       </div>
 
